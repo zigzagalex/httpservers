@@ -1,11 +1,17 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"sync/atomic"
+
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
+	"github.com/zigzagalex/httpservers/internal/database"
 )
 
 type apiConfig struct {
@@ -109,6 +115,11 @@ func validateChirpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Open connection to Postgres database
+	godotenv.Load()
+	dbURL := os.Getenv("DB_URL")
+	db, err := sql.Open("postgres", dbURL)
+	dbQueries := database.New(db)
 
 	serveMux := http.NewServeMux()
 
