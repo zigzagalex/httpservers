@@ -11,7 +11,7 @@ import (
 
 const getUsers = `-- name: GetUsers :many
 SELECT 
-    id, created_at, updated_at, email
+    id, created_at, updated_at, email, hashed_password
 FROM users
 ORDER BY 
     created_at ASC
@@ -31,6 +31,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Email,
+			&i.HashedPassword,
 		); err != nil {
 			return nil, err
 		}
